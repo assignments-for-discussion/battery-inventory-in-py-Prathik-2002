@@ -1,7 +1,7 @@
-
 def count_batteries_by_health(present_capacities):
     
     count_batteries_by_health_dictionary = {"healthy": 0,"exchange": 0,"failed": 0}
+
     for present_capacity in present_capacities:
         current_SoH = calculateSoH(present_capacity, 120)
         if current_SoH > 80:
@@ -10,10 +10,15 @@ def count_batteries_by_health(present_capacities):
             count_batteries_by_health_dictionary["exchange"] += 1
         else:
             count_batteries_by_health_dictionary["failed"] += 1
+
     return count_batteries_by_health_dictionary
 
+#calculates SoH INPUT: (present_capacity, rated_capacity)
 def calculateSoH(present_capacity, rated_capacity):
     #`SoH% = 100 * present_capacity / rated_capacity`
+    if present_capacity > rated_capacity:
+        print("Present Capacity can not exceed Rated Capacity")
+        exit()
     if rated_capacity == 0:
         print("Rated Capacity can not be 0\n")
         exit()
@@ -23,11 +28,11 @@ def calculateSoH(present_capacity, rated_capacity):
     
 def test_bucketing_by_health():
     print("Counting batteries by SoH...\n")
-    present_capacities = [113, 116, 80, 95, 92, 70, 0, 3]
+    present_capacities = [113, 80, 116, 80, 62, 95, 92, 70, 0, 3]
     counts = count_batteries_by_health(present_capacities)
     assert(counts["healthy"] == 2)
-    assert(counts["exchange"] == 3)
-    assert(counts["failed"] == 3)
+    assert(counts["exchange"] == 4)
+    assert(counts["failed"] == 4)
     print("Done counting :)")
 
 
